@@ -1,7 +1,7 @@
 //Returns random integer inclusive between 0 and max
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
-}
+};
 
 //Returns Rock, Paper, or Scissors at an even chance
 function computerPlay() {
@@ -9,11 +9,11 @@ function computerPlay() {
     if (throwNum === 1) {return 'Rock';}
     else if (throwNum === 2) {return 'Paper';}
     else {return 'Scissors';}
-}
+};
 
-//Define the inuts to playRound
-let playerSelection = "rock";
-let computerSelection = computerPlay();
+//Define the inputs to playRound, no longer used
+//let playerSelection = "rock";
+//let computerSelection = computerPlay();
 
 //Takes two consts and outputs whether the player wins or loses vs the computer
 function playRound(playerSelection, computerSelection) {
@@ -48,9 +48,39 @@ function playRound(playerSelection, computerSelection) {
         else {return 0;}
     }
 
-}
+};
 
-//Game that plays 5 rounds. Tracks current score, winner of each round, and ultimate winner.
+//Create battle log to output round results
+const battleLog = document.querySelector('.battle-log');
+
+//Assign listeners to all 3 buttons.
+const weaponButtons = document.querySelectorAll('.weapon');
+weaponButtons.forEach(weaponButton => weaponButton.addEventListener('click', function(e) {
+    //Determine result of this call
+    let result = playRound(e.target.id, computerPlay());
+    roundEffect(result, roundNumber); //Increment score based on winner and output to the battle log based on round number
+    roundNumber++; //Increment round number
+
+}));
+
+let playerScore = 0;
+let computerScore = 0;
+let roundNumber = 0;
+
+//Increments score based on winner and output to the battle log
+function roundEffect(result, i) {
+    if (result === 0) {
+        computerScore++;
+        console.log(`The machines won Round ${i+1}...`)
+    } else if (result === 1) {
+        playerScore++;
+        console.log(`You won Round ${i+1}!`);
+    } else if (result === 2) {
+        console.log(`Round ${i+1} was a tie!`);
+    }
+};
+
+/*Game that plays 5 rounds. Tracks current score, winner of each round, and ultimate winner.
 function game() {
     let playerScore = 0;
     let computerScore = 0;
@@ -75,4 +105,4 @@ function game() {
     if (playerScore === computerScore) {console.log("The game was a tie!");}
     else if (playerScore < computerScore) {console.log("You lost the game...");}
     else if (playerScore > computerScore) {console.log("You won the game!");}
-}
+};*/
