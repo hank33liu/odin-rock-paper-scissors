@@ -50,8 +50,24 @@ function playRound(playerSelection, computerSelection) {
 
 };
 
-//Create battle log to output round results
+let playerScore = 0;
+let computerScore = 0;
+let roundNumber = 0;
+
+//Create round display
+const roundDisplay = document.querySelector('#currentRound')
+roundDisplay.textContent = `Round: ${roundNumber}`;
+
+//Create scores to score divs
+const playerScoreDisplay = document.querySelector('#playerScore');
+const computerScoreDisplay = document.querySelector('#computerScore');
+playerScoreDisplay.textContent = `Player: ${playerScore}`;
+computerScoreDisplay.textContent = `Computer: ${computerScore}`;
+
+//Create battle log const that we can add divs to
 const battleLog = document.querySelector('.battle-log');
+let round = document.createElement('div');
+
 
 //Assign listeners to all 3 buttons.
 const weaponButtons = document.querySelectorAll('.weapon');
@@ -59,26 +75,44 @@ weaponButtons.forEach(weaponButton => weaponButton.addEventListener('click', fun
     //Determine result of this call
     let result = playRound(e.target.id, computerPlay());
     roundEffect(result, roundNumber); //Increment score based on winner and output to the battle log based on round number
-    roundNumber++; //Increment round number
 
+    if (roundNumber  < 5) {roundNumber++}; //Increment round number if round isn't already 5
+
+    //Update score displays
+    roundDisplay.textContent = `Round: ${roundNumber}`;
+    playerScoreDisplay.textContent = `Player: ${playerScore}`;
+    computerScoreDisplay.textContent = `Computer: ${computerScore}`;
 }));
-
-let playerScore = 0;
-let computerScore = 0;
-let roundNumber = 0;
 
 //Increments score based on winner and output to the battle log
 function roundEffect(result, i) {
-    if (result === 0) {
-        computerScore++;
-        console.log(`The machines won Round ${i+1}...`)
-    } else if (result === 1) {
-        playerScore++;
-        console.log(`You won Round ${i+1}!`);
-    } else if (result === 2) {
-        console.log(`Round ${i+1} was a tie!`);
+    if (roundNumber < 5) {
+        if (result === 0) {
+            computerScore++;
+            round.textContent +=`The machines won Round ${i+1}... 
+            `;
+            round.textContent +=' ';
+        } else if (result === 1) {
+            playerScore++;
+            round.textContent += `You won Round ${i+1}!
+            `;
+        } else if (result === 2) {
+            round.textContent += `Round ${i+1} was a tie!
+            `;
+        }
+        if (roundNumber === 4) {gameWinner(playerScore, computerScore)};
+        //Add round result to battle log
+        battleLog.appendChild(round);
     }
 };
+
+//Determine the winner of the war
+function gameWinner(playerScore, computerScore) {
+    if (playerScore === computerScore) {round.textContent += "The game was a tie!";}
+    else if (playerScore < computerScore) {round.textContent += "You lost the game...";}
+    else if (playerScore > computerScore) {round.textContent += "You won the game!";}
+    round.textContent += "Please refresh the page to start the game again."
+}
 
 /*Game that plays 5 rounds. Tracks current score, winner of each round, and ultimate winner.
 function game() {
